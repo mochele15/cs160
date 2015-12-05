@@ -40,11 +40,57 @@
 extern int yydebug;
 #endif
 
+/* Tokens.  */
+#ifndef YYTOKENTYPE
+# define YYTOKENTYPE
+   /* Put the tokens into the symbol table, so that GDB and other debuggers
+      know about them.  */
+   enum yytokentype {
+     T_TRUE = 258,
+     T_FALSE = 259,
+     T_SEMICOLON = 260,
+     T_COLON = 261,
+     T_COMMA = 262,
+     T_OPENBRACKET = 263,
+     T_CLOSEBRACKET = 264,
+     T_OPENPAREN = 265,
+     T_CLOSEPAREN = 266,
+     T_ARROW = 267,
+     T_RETURN = 268,
+     T_EQUAL = 269,
+     T_IF = 270,
+     T_ELSE = 271,
+     T_WHILE = 272,
+     T_REPEAT = 273,
+     T_UNTIL = 274,
+     T_PRINT = 275,
+     T_PLUS = 276,
+     T_MINUS = 277,
+     T_MULTIPLY = 278,
+     T_DIVIDE = 279,
+     T_LESSTHAN = 280,
+     T_LESSEQUALTO = 281,
+     T_EQUALS = 282,
+     T_AND = 283,
+     T_OR = 284,
+     T_NOT = 285,
+     T_NEW = 286,
+     T_BEGINCOMMENT = 287,
+     T_NONE = 288,
+     T_ENDCOMMENT = 289,
+     T_PERIOD = 290,
+     T_NUMBER = 291,
+     T_IDEN = 292,
+     T_INTEGER = 293,
+     T_BOOLEAN = 294,
+     T_EXTENDS = 295,
+     T_NEG = 296
+   };
+#endif
 
 
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
+
 # define yystype YYSTYPE /* obsolescent; will be withdrawn */
 # define YYSTYPE_IS_DECLARED 1
 #endif
