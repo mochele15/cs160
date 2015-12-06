@@ -1,6 +1,8 @@
 # Backup Files
 *~
 
+*.s
+
 # Compiled Object files
 *.slo
 *.lo
