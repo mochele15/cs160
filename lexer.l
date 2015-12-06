@@ -64,7 +64,7 @@
 "."               { return T_PERIOD; }
 [0-9][0-9]*       { yylval.base_int = atoi(yytext); return T_NUMBER; }
 [a-zA-Z][a-zA-Z0-9_]* { yylval.base_char_ptr = yytext; return T_IDEN; }
-[ \t\n]           ;
+[ \t\r\n]         ;
 
 .                 { yyerror("invalid character"); }
 

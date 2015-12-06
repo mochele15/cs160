@@ -54,6 +54,8 @@ void CodeGenerator::visitCallNode(CallNode* node) {
 
 void CodeGenerator::visitIfElseNode(IfElseNode* node) {
   // WRITEME: Replace with code if necessary
+  int labelT = nextLabel();
+  
 }
 
 void CodeGenerator::visitWhileNode(WhileNode* node) {
@@ -213,6 +215,7 @@ void CodeGenerator::visitMemberAccessNode(MemberAccessNode* node) {
 
 void CodeGenerator::visitVariableNode(VariableNode* node) {
   // WRITEME: Replace with code if necessary
+  
 }
 
 void CodeGenerator::visitIntegerLiteralNode(IntegerLiteralNode* node) {
