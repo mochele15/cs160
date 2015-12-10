@@ -263,11 +263,28 @@ void CodeGenerator::visitMethodCallNode(MethodCallNode* node) {
 
 void CodeGenerator::visitMemberAccessNode(MemberAccessNode* node) {
   // WRITEME: Replace with code if necessary
+  node->visit_children(this);
+  if(currentMethodInfo.variables->count(node->identifier_1->name) > 0) {
+    VariableInfo vi = currentMethodInfo.variables->find(node->identifier_1->name)->second;
+    std::cout << " mov " << vi.offset << "(%ebp), %edx" << std::endl;
+    std::cout << " push " << classTable->find(vi.type.objectClassName)->second.members->find(node->identifier_2->name)->second.offset << "(%edx)" << std::endl;
+  }
+  else {
+    VariableInfo vi = currentMethodInfo.variables->find(node->identifier_1->name)->second;
+    std::cout << " mov 8(%ebp), %edx" << std::endl;
+    std::cout << " mov " << vi.offset << "(%edx), %ebx" << std::endl;
+    std::cout << " push " << classTable->find(vi.type.objectClassName)->second.members->find(node->identifier_2->name)->second.offset << "(%ebx)" << std::endl;
+  }
 }
 
 void CodeGenerator::visitVariableNode(VariableNode* node) {
   // WRITEME: Replace with code if necessary
-  
+  if(currentMethodInfo.variables->count(node->identifier->name) > 0)
+    std::cout << " push " << currentMethodInfo.variables->find(node->identifier->name)->second.offset << "(%ebp)" << std::endl;
+  else {
+    std::cout << " mov 8(%ebp), %edx" << std::endl;
+    std::cout << " push " << currentClassInfo.members->find(node->identifier->name)->second.offset << "(%edx)" << std::endl;
+  }
 }
 
 void CodeGenerator::visitIntegerLiteralNode(IntegerLiteralNode* node) {
