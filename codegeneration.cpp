@@ -4,6 +4,8 @@
 // you will complete to generate the x86 assembly code. Not
 // all functions must have code, many may be left empty.
 
+
+
 void CodeGenerator::visitProgramNode(ProgramNode* node) {
   // WRITEME: Replace with code if necessary
   std::cout << " .data" << std::endl;
@@ -22,11 +24,22 @@ void CodeGenerator::visitClassNode(ClassNode* node) {
 }
 
 void CodeGenerator::visitMethodNode(MethodNode* node) {
+  currentMethodName = node->identifier->name;
+  currentMethodInfo = currentClassInfo.methods -> find(currentMethodName)->second;
+  std::cout << "   "<<currentClassName <<"_"<< currentMethodName << ":" << std::endl;
+  node ->visit_children(this);
   // WRITEME: Replace with code if necessary
 }
 
 void CodeGenerator::visitMethodBodyNode(MethodBodyNode* node) {
-  // WRITEME: Replace with code if necessary
+  std::cout << "  push %ebp" << std::endl;
+  std::cout << "  mov %esp, %ebp" << std::endl;
+  std::cout << "  sub $" << currentMethodInfo.localsSize <<", %esp" << std::endl;
+
+  node->visit_children(this);
+
+  std::cout << "  leave" << std::endl;
+  std::cout << "  ret" << std::endl; 
 }
 
 void CodeGenerator::visitParameterNode(ParameterNode* node) {
