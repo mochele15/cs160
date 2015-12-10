@@ -67,16 +67,55 @@ void CodeGenerator::visitCallNode(CallNode* node) {
 
 void CodeGenerator::visitIfElseNode(IfElseNode* node) {
   // WRITEME: Replace with code if necessary
-  int labelT = nextLabel();
+  int labelF = nextLabel();
+  int labelE = nextLabel();
+  node->expression->accept(this);
+  std::cout << " pop %edx" << std::endl;
+  std::cout << " cmp $1, %edx" << std::endl;
+  std::cout << " jne " << labelF << std::endl;
+  if(node->statement_list_1 != NULL) {
+    for(std::list<StatementNode*>::iterator i = node->statement_list_1->begin(); i != node->statement_list_1->end(); i++)
+      (*i)->accept(this);
+  }
+  std::cout << " jmp " << labelE << std::endl;
+  std::cout << " " << labelF << ":" << std::endl;
+  if(node->statement_list_2 != NULL) {
+    for(std::list<StatementNode*>::iterator i = node->statement_list_2->begin(); i != node->statement_list_2->end(); i++)
+      (*i)->accept(this);
+  }
+  std::cout << " " << labelE << ":" << std::endl;
   
 }
 
 void CodeGenerator::visitWhileNode(WhileNode* node) {
   // WRITEME: Replace with code if necessary
+  int labelCondition = nextLabel();
+  int labelE = nextLabel(); 
+  std::cout << " " << labelCondition << ":" << std::endl;
+  node->expression->accept(this);
+  std::cout << " pop %edx" << std::endl;
+  std::cout << " cmp $1, %edx" << std::endl;
+  std::cout << " jne " << labelE << std::endl;
+  if(node->statement_list != NULL) {
+    for(std::list<StatementNode*>::iterator i = node->statement_list->begin(); i != node->statement_list->end(); i++)
+      (*i)->accept(this);
+  }
+  std::cout << " jmp " << labelCondition << ":" << std::endl;
+  std::cout << " " << labelE << ":" << std::endl;
 }
 
 void CodeGenerator::visitRepeatNode(RepeatNode* node) {
   // WRITEME: Replace with code if necessary
+  int labelStatement = nextLabel();
+  std::cout << " " << labelStatement << ":" << std::endl;
+  node->expression->accept(this);
+  if(node->statement_list != NULL) {
+    for(std::list<StatementNode*>::iterator i = node->statement_list->begin(); i != node->statement_list->end(); i++)
+      (*i)->accept(this);
+  }
+  std::cout << " pop %edx" << std::endl;
+  std::cout << " cmp $1, %edx" << std::endl;
+  std::cout << " jne " << labelStatement << std::endl;
 }
 
 void CodeGenerator::visitPrintNode(PrintNode* node) {
