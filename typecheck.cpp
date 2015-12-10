@@ -97,7 +97,7 @@ void TypeCheck::visitClassNode(ClassNode* node) {
   while(superClass != "") {
     VariableTable *superVars = classTable->find(c.superClassName)->second.members;
     superClass = classTable->find(superClass)->second.superClassName;
-    for(std::map<std::string, VariableInfo>:: iterator i = superVars->begin(); i != superVars.end(); i++) {
+    for(std::map<std::string, VariableInfo>:: iterator i = superVars->begin(); i != superVars->end(); i++) {
       VariableInfo vi = i->second;
       vi.offset = currentMemberOffset;
       (*currentVariableTable)[i->first] = vi;
@@ -174,12 +174,12 @@ void TypeCheck::visitMethodNode(MethodNode* node) {
       // check if the super class has it 
       std::string superClass = classTable->find(node->methodbody->objectClassName)->second.superClassName;
       while(superClass != "") {
-	if(superclass != node->type->objectClassName) 
-	  super = classTable->find(superClass)->second.superClassName;
+	if(superClass != node->type->objectClassName) 
+	  superClass = classTable->find(superClass)->second.superClassName;
 	else 
 	  break;
       }
-      if(super == "") 
+      if(superClass == "") 
 	typeError(return_type_mismatch);
       else {
 
@@ -239,7 +239,7 @@ void TypeCheck::visitDeclarationNode(DeclarationNode* node) {
       v.offset = currentLocalOffset; 
       currentLocalOffset -= 4;
     }
-    (*currentVariableTable)[*i->name] = v;
+    (*currentVariableTable)[(*i)->name] = v;
   }
 }
 
@@ -624,7 +624,7 @@ void TypeCheck::visitNewNode(NewNode* node) {
     for(std::list<ExpressionNode*>::iterator nodeParams = node->expression_list->begin(); nodeParams != node->expression_list->end(); nodeParams++) {
       if ((*nodeParams)->basetype != (*methodParams).baseType || (*nodeParams)->objectClassName != (*methodParams).objectClassName)
 	typeError(argument_type_mismatch);
-      methodParameters++;
+      methodParams++;
     }
   }
   node->basetype = bt_object;
