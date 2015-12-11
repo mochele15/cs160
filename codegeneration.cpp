@@ -57,6 +57,29 @@ void CodeGenerator::visitReturnStatementNode(ReturnStatementNode* node) {
 }
 
 void CodeGenerator::visitAssignmentNode(AssignmentNode* node) {
+    node->visit_children(this);
+    std::cout << "  pop %eax"<< std::endl;
+    if (node->identifier_2 == NULL) {
+        if (currentMethodInfo.variables->count(node->identifier_1->name) > 0) {
+            std::cout << "  mov %eax, " << currentMethodInfo.variables->find(node->identifier_1->name)->second.offset<<"(%ebp)"<< std::endl;
+        } else {
+            std::cout << "  mov 8(%ebp), %edx" << std::endl;
+            std::cout << "  mov %eax, " << currentClassInfo.members->find(node->identifier_1->name)->second.offset<<"(%edx)"<< std::endl;
+
+        }
+    } else {
+        VariableInfo objectInfo;
+        if (currentMethodInfo.variables->count(node->identifier_1->name) > 0) {
+            objectInfo = currentMethodInfo.variables->find(node->identifier_1->name)->second;
+        } else {
+            objectInfo = currentClassInfo.members->find(node->identifier_1->name)->second;
+        }
+        std::cout << "  mov " << objectInfo.offset <<"(%ebp), %edx" << std::endl;
+        int memberoffset = classTable->find(objectInfo.type.objectClassName)->second.members->find(node->identifier_2->name)->second.offset;
+        std::cout << "  mov %eax, " << memberoffset <<"(%edx)" << std::endl;
+        
+
+    }
   // WRITEME: Replace with code if necessary
 }
 
