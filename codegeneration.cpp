@@ -261,7 +261,7 @@ void CodeGenerator::visitMethodCallNode(MethodCallNode* node) {
   // WRITEME: Replace with code if necessary
   // call all arguments in the method call in reverse order
   if(node->expression_list->size() > 0) {
-    for(std::list<ExpressionNode*>reverse_iterator i = node->expression_list->rbegin(); i != node->expression_list->rend(); i++) 
+    for(std::list<ExpressionNode*>::reverse_iterator i = node->expression_list->rbegin(); i != node->expression_list->rend(); i++) 
       (*i)->accept(this);
   }
   if(node->identifier_2 == NULL) { // check if there is a super class or not
@@ -270,8 +270,8 @@ void CodeGenerator::visitMethodCallNode(MethodCallNode* node) {
       std::cout << " call " << currentClassName << "_" << node->identifier_1->name << std::endl;
     else {
       std::string superClass = currentClassInfo.superClassName;
-      while(classTable->find(super)->second.methods->count(node->identifier_1->name) == 0) 
-	superClass = classTable->find(super)->second.superClassName;
+      while(classTable->find(superClass)->second.methods->count(node->identifier_1->name) == 0) 
+	superClass = classTable->find(superClass)->second.superClassName;
       std::cout << " call " << superClass << "_" << node->identifier_1->name << std::endl;
     }
   }
@@ -279,24 +279,24 @@ void CodeGenerator::visitMethodCallNode(MethodCallNode* node) {
     if(currentMethodInfo.variables->count(node->identifier_1->name) > 0) {
       VariableInfo vi = currentMethodInfo.variables->find(node->identifier_1->name)->second;
       std::cout << " push " << vi.offset << "(%ebp)" << std::endl;
-      if(classTable->find(vi.type.objectClassName)->second.methods->count(node->idnetifier_2=>name) > 0) 
+      if(classTable->find(vi.type.objectClassName)->second.methods->count(node->identifier_2->name) > 0) 
 	std::cout << " call " << vi.type.objectClassName << "_" << node->identifier_2->name << std::endl;
       else {
 	std::string superClass = classTable->find(vi.type.objectClassName)->second.superClassName;
 	while(classTable->find(superClass)->second.methods->count(node->identifier_2->name) == 0) 
-	  superClass = classTable->find(super)->second.superClassName;
+	  superClass = classTable->find(superClass)->second.superClassName;
 	std::cout << " call " << superClass << "_" << node->identifier_2->name << std::endl;
       }
     }
     else if(currentClassInfo.members->count(node->identifier_1->name) > 0) {
       VariableInfo vi = currentMethodInfo.variables->find(node->identifier_1->name)->second;
       std::cout << " push " << vi.offset << "(%ebp)" << std::endl;
-      if(classTable->find(vi.type.objectClassName)->second.methods->count(node->idnetifier_2=>name) > 0) 
+      if(classTable->find(vi.type.objectClassName)->second.methods->count(node->identifier_2->name) > 0) 
 	std::cout << " call " << vi.type.objectClassName << "_" << node->identifier_2->name << std::endl;
       else {
 	std::string superClass = classTable->find(vi.type.objectClassName)->second.superClassName;
 	while(classTable->find(superClass)->second.methods->count(node->identifier_2->name) == 0) 
-	  superClass = classTable->find(super)->second.superClassName;
+	  superClass = classTable->find(superClass)->second.superClassName;
 	std::cout << " call " << superClass << "_" << node->identifier_2->name << std::endl;
       }
     }
