@@ -350,6 +350,26 @@ void CodeGenerator::visitBooleanLiteralNode(BooleanLiteralNode* node) {
 
 void CodeGenerator::visitNewNode(NewNode* node) {
   // WRITEME: Replace with code if necessary
+  ClassInfo ci = classTable->find(node->identifier->name)->second;
+  std::cout << " push $" << ci.membersSize << std::endl;
+  std::cout << " call malloc" << std::endl;
+  std::cout << " add $4, %esp" << std::endl;
+  std::cout << " push %eax" << std::endl;
+  std::cout << " mov %eax, %ecx" << std::endl;
+  if(node->expression_list != NULL) {
+    for(std::list<ExpressionNode*>::reverse_iterator i = node->expression_list->rbegin(); i != node->expression_list->rend(); i++)
+      (*i)->accept(this);
+    std::cout << " push %ecx" << std::endl;
+    std::cout << " call " << node->identifier->name << "_" << node->identifier->name << std::endl;
+    std::cout << " add $" << (4*node->expression_list->size()) + 4 << ", %esp" << std::endl;
+  }
+  else {
+    if(classTable->find(node->identifier->name)->second.methods->count(node->identifier->name) > 0) {
+      std::cout << " push %ecx" << std::endl;
+      std::cout << " call " << node->identifier->name << "_" << node->identifier->name << std::endl;
+      std::cout << " add $4, %esp" << std::endl;
+    }
+  }
 }
 
 void CodeGenerator::visitIntegerTypeNode(IntegerTypeNode* node) {
