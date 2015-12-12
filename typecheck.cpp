@@ -97,7 +97,7 @@ void TypeCheck::visitClassNode(ClassNode* node) {
   while(superClass != "") {
     VariableTable *superVars = classTable->find(c.superClassName)->second.members;
     superClass = classTable->find(superClass)->second.superClassName;
-    for(std::map<std::string, VariableInfo>:: iterator i = superVars->begin(); i != superVars->end(); i++) {
+    for(std::map<std::string, VariableInfo>::iterator i = superVars->begin(); i != superVars->end(); i++) {
       VariableInfo vi = i->second;
       vi.offset = currentMemberOffset;
       (*currentVariableTable)[i->first] = vi;
@@ -167,7 +167,7 @@ void TypeCheck::visitMethodNode(MethodNode* node) {
 
   if(node->type->basetype == bt_none && node->methodbody->returnstatement != NULL)
     typeError(return_type_mismatch);
-  if(node->type->basetype != bt_none && (node->methodbody->basetype != node->type->basetype || node->methodbody->objectClassName != node->type->objectClassName)) 
+  if(node->type->basetype != bt_none && node->methodbody->basetype != node->type->basetype) 
     typeError(return_type_mismatch);
   if(node->type->basetype == bt_object && node->methodbody->basetype == bt_object) {
     if(node->methodbody->objectClassName != node->type->objectClassName) {
@@ -431,13 +431,13 @@ void TypeCheck::visitMethodCallNode(MethodCallNode* node) {
   MethodInfo methodinfo;
   methodinfo.localsSize = -1;
   if (node->identifier_2 == NULL) {
-    if (currentMethodTable -> count(node->identifier_1->name)>0)
-      methodinfo = currentMethodTable->find(node->identifier_1->name)->second;        
+    if (currentMethodTable -> count(node->identifier_1->name) > 0)
+      methodinfo = currentMethodTable->find(node->identifier_1->name)->second;    
     ClassInfo currentClassInfo;
     currentClassInfo = classTable->find(currentClassName)->second;
     std::string superClass = currentClassInfo.superClassName;
     while (superClass != "") {
-      currentClassInfo =classTable->find(superClass)->second;
+      currentClassInfo = classTable->find(superClass)->second;
       if (currentClassInfo.methods->count(node->identifier_1->name) > 0) {
 	methodinfo = currentClassInfo.methods->find(node->identifier_1->name)->second;
 	break;
@@ -452,7 +452,7 @@ void TypeCheck::visitMethodCallNode(MethodCallNode* node) {
     if (currentVariableTable->count(node->identifier_1->name) > 0) {
       ct = currentVariableTable->find(node->identifier_1->name)->second.type;
     }
-    else if (classTable->find(currentClassName)->second.members->count(node->identifier_1->name)>0) {
+    else if (classTable->find(currentClassName)->second.members->count(node->identifier_1->name) > 0) {
       ct = classTable->find(currentClassName)->second.members->find(node->identifier_1->name)->second.type;
     } 
     else {    
@@ -460,7 +460,7 @@ void TypeCheck::visitMethodCallNode(MethodCallNode* node) {
       currentClassInfo = classTable->find(currentClassName)->second;
       std::string superClass = currentClassInfo.superClassName;
       while (superClass != "") {
-	currentClassInfo =classTable->find(superClass)->second;          
+	currentClassInfo = classTable->find(superClass)->second;          
 	if (currentClassInfo.members->count(node->identifier_1->name) > 0) {
 	  ct = currentClassInfo.members->find(node->identifier_1->name)->second.type;
 	  break;
@@ -513,9 +513,9 @@ void TypeCheck::visitMemberAccessNode(MemberAccessNode* node) {
   CompoundType ct;
   ct.objectClassName = " ";
     
-  if (currentVariableTable->count(node->identifier_1->name)>0)
+  if (currentVariableTable->count(node->identifier_1->name) > 0)
     ct = currentVariableTable->find(node->identifier_1->name)->second.type;
-  if (classTable->find(currentClassName)->second.members->count(node->identifier_1->name)>0) {
+  if (classTable->find(currentClassName)->second.members->count(node->identifier_1->name) > 0) {
     ct = classTable->find(currentClassName)->second.members->find(node->identifier_1->name)->second.type;
   } 
   else {
@@ -546,7 +546,7 @@ void TypeCheck::visitMemberAccessNode(MemberAccessNode* node) {
     std::string obj = node->identifier_2->name;
     ct.objectClassName = " ";
     while (superClass != "") {
-      currentClassInfo =classTable->find(superClass)->second;
+      currentClassInfo = classTable->find(superClass)->second;
       if (currentClassInfo.members->count(obj) > 0) {
 	ct = currentClassInfo.members->find(obj)->second.type;
 	break;
@@ -568,7 +568,7 @@ void TypeCheck::visitVariableNode(VariableNode* node) {
   CompoundType varType;
   varType.objectClassName = " ";
     
-  if (currentVariableTable->count(node->identifier->name)>0)
+  if (currentVariableTable->count(node->identifier->name) > 0)
     varType = currentVariableTable->find(node->identifier->name)->second.type;
   if (classTable->find(currentClassName)->second.members->count(node->identifier->name)>0) {
     varType = classTable->find(currentClassName)->second.members->find(node->identifier->name)->second.type;
@@ -578,7 +578,7 @@ void TypeCheck::visitVariableNode(VariableNode* node) {
     currentClassInfo = classTable->find(currentClassName)->second;
     std::string superClass = currentClassInfo.superClassName;
     while (superClass != "") {
-      currentClassInfo =classTable->find(superClass)->second;
+      currentClassInfo = classTable->find(superClass)->second;
       if (currentClassInfo.members->count(node->identifier->name) > 0) {
 	varType = currentClassInfo.members->find(node->identifier->name)->second.type;
 	break;
