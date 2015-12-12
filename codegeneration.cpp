@@ -123,7 +123,7 @@ void CodeGenerator::visitWhileNode(WhileNode* node) {
     for(std::list<StatementNode*>::iterator i = node->statement_list->begin(); i != node->statement_list->end(); i++)
       (*i)->accept(this);
   }
-  std::cout << " jmp " << labelCondition << ":" << std::endl;
+  std::cout << " jmp " << labelCondition << std::endl;
   std::cout << " " << labelE << ":" << std::endl;
 }
 
